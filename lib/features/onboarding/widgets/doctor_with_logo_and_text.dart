@@ -27,7 +27,7 @@ class DoctorWithLogoAndText extends StatelessWidget {
             ],
             ),
           ),
-          child: Image.asset('assets/images/onboarding_doctor.png'),
+          child: Image.asset('assets/images/onboarding_doctor.png', height: 500,),
         ),
           Positioned(
             bottom: 0,

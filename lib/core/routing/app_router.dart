@@ -1,5 +1,5 @@
 import 'package:doctors_app/core/routing/routes.dart';
-import 'package:doctors_app/features/login/login.dart';
+import 'package:doctors_app/features/login/ui/screens/login.dart';
 import 'package:doctors_app/features/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 

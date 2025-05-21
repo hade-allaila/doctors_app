@@ -11,7 +11,7 @@ class GetStartedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () { 
+      onPressed: () {
         context.pushNamed(Routes.loginScreen);
       },
       style: ButtonStyle(
@@ -22,7 +22,7 @@ class GetStartedButton extends StatelessWidget {
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
       ),
-      child: Text("Get Started", style: TextStyles.font16White600Weight),
+      child: Text("Get Started", style: TextStyles.font16WhiteSemiBold),
     );
   }
 }

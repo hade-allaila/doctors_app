@@ -10,9 +10,11 @@ class AppTextButton extends StatelessWidget {
   double? verticalPadding;
   TextStyle? textStyle;
   Color? backgroundColor;
+  VoidCallback onPressed;
   String text;
   AppTextButton({
     super.key,
+    required this.onPressed,
     this.width,
     this.height,
     this.horizontalPadding,
@@ -24,7 +26,7 @@ class AppTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: WidgetStatePropertyAll<Color>(
           backgroundColor ?? ColorManager.mainBlue,

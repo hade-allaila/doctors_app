@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AppTextFormField extends StatelessWidget {
   final EdgeInsetsGeometry? contentPadding;
   final InputBorder? focusedBorder;
+  final InputBorder? errorBorder;
+  final InputBorder? focusedErrorBorder;
   final InputBorder? enabledBorder;
   final TextStyle? hintTextStyle;
   final TextStyle? inputTextStyle;
@@ -13,6 +15,8 @@ class AppTextFormField extends StatelessWidget {
   final bool? isObscure;
   final Widget? suffixIcon;
   final Color? backgroundColor;
+  final TextEditingController? controller;
+  final Function(String?) validator;
   const AppTextFormField({
     super.key,
     this.contentPadding,
@@ -24,11 +28,17 @@ class AppTextFormField extends StatelessWidget {
     this.isObscure,
     this.suffixIcon,
     this.backgroundColor,
+    this.controller,
+    required this.validator, this.errorBorder, this.focusedErrorBorder,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
+      validator: (value) { 
+        return validator(value);
+      },
       decoration: InputDecoration(
         isDense: true,
         filled: true,
@@ -50,6 +60,18 @@ class AppTextFormField extends StatelessWidget {
                 width: 1.3,
               ),
               borderRadius: BorderRadius.circular(16.r),
+            ),
+            errorBorder: errorBorder ?? OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.red,
+                width: 1.3,
+              )
+            ),
+            focusedErrorBorder: focusedErrorBorder ?? OutlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.red,
+                width: 1.3,
+              )
             ),
         hintStyle: hintTextStyle ?? TextStyles.font14lightGrayRegular,
         hintText: hintText,

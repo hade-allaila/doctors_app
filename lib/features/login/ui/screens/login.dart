@@ -2,9 +2,14 @@ import 'package:doctors_app/core/helpers/spacing.dart';
 import 'package:doctors_app/core/theming/text_style.dart';
 import 'package:doctors_app/core/widgets/app_text_button.dart';
 import 'package:doctors_app/core/widgets/app_text_form_field.dart';
+import 'package:doctors_app/features/login/data/models/login_request_body.dart';
+import 'package:doctors_app/features/login/logic/cubit/login_cubit.dart';
 import 'package:doctors_app/features/login/ui/widgets/already_have_account_text.dart';
+import 'package:doctors_app/features/login/ui/widgets/email_and_password.dart';
+import 'package:doctors_app/features/login/ui/widgets/login_bloc_listener.dart';
 import 'package:doctors_app/features/login/ui/widgets/terms_and_conditions_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Login extends StatefulWidget {
@@ -15,8 +20,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  GlobalKey formKey = GlobalKey<FormState>();
-  bool isobscureText = true;
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<LoginCubit>(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,44 +43,30 @@ class _LoginState extends State<Login> {
                   style: TextStyles.font12GreyRegular,
                 ),
                 verticalSpace(36),
-                Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      AppTextFormField(hintText: 'Email'),
-                      verticalSpace(18),
-                      AppTextFormField(
-                        hintText: "Password",
-                        isObscure: isobscureText,
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isobscureText = !isobscureText;
-                            });
-                          },
-                          icon: Icon(
-                            isobscureText
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                          ),
-                        ),
+                Column(
+                  children: [
+                    EmailAndPassword(),
+                    verticalSpace(24),
+                    Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: Text(
+                        "forget password?",
+                        style: TextStyles.font13BlueRegular,
                       ),
-                      verticalSpace(24),
-                      Align(
-                        alignment: AlignmentDirectional.centerEnd,
-                        child: Text(
-                          "forget password?",
-                          style: TextStyles.font13BlueRegular,
-                        ),
-                      ),
-                      verticalSpace(40),
-                      AppTextButton(text: "Login"),
-                      verticalSpace(40),
-                      TermsAndConditionsText(),
-                      verticalSpace(20),
-                      AlreadyHaveAccountText(),
-                    ],
-                  ),
+                    ),
+                    verticalSpace(40),
+                    AppTextButton(
+                      text: "Login",
+                      onPressed: () {
+                        validateThenLogin(context);
+                      },
+                    ),
+                    verticalSpace(40),
+                    TermsAndConditionsText(),
+                    verticalSpace(20),
+                    AlreadyHaveAccountText(),
+                    LoginBlocListener(),
+                  ],
                 ),
               ],
             ),
@@ -79,5 +74,17 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  void validateThenLogin(BuildContext context) {
+    print("now we are validating input");
+    if (context.read<LoginCubit>().formKey.currentState!.validate()) {
+      context.read<LoginCubit>().emitLoginState(
+        LoginRequestBody(
+          email: context.read<LoginCubit>().emailController.text,
+          password: context.read<LoginCubit>().passwordController.text,
+        ),
+      );
+    }
   }
 }
